@@ -98,7 +98,7 @@ CASE WHEN ftr = 'H' THEN 0 ELSE 1 END;
 10) In which division and which season were the most goals scored?
 
 ```sql
-<!-- Copy solution here -->
+
 
 
 ```
