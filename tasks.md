@@ -119,6 +119,8 @@ SELECT division_code, season, SUM (fthg+ftag)
 FROM matches
 GROUP BY division_code, season
 ORDER BY sum DESC LIMIT 1;
+
+SELECT name FROM divisions WHERE code = 'EC';
 ```
 
 ### Useful Resources
