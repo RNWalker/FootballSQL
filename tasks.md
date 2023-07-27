@@ -29,6 +29,9 @@ SELECT name FROM divisions WHERE country = 'Scotland';
 4) Find the value of the `code` for the `Bundesliga` division. Use that code to find out how many matches Freiburg have played in that division. HINT: You will need to query both tables
 
 ```sql
+SELECT code FROM divisions WHERE name = 'Bundesliga';
+SELECT COUNT(*) from matches WHERE division_code ='D1' AND hometeam = 'Freiburg' OR awayteam = 'Freiburg';
+-- your inner join
 SELECT COUNT(matches.id) AS match_count
 FROM matches
 INNER JOIN divisions ON matches.division_code = divisions.code
@@ -42,6 +45,8 @@ AND divisions.name = 'Bundesliga';
 
 ```sql
 SELECT DISTINCT * FROM matches WHERE awayteam LIKE('%City%') OR hometeam LIKE('%City%');
+-- other solution
+SELECT DISTINCT awayteam FROM matches WHERE LOWER(awayteam) LIKE LOWER('%City%');
 
 
 ```
@@ -60,7 +65,8 @@ FROM (
     WHERE divisions.country = 'France'
 ) AS teams;
 
-
+--
+SELECT COUNT(DISTINCT hometeam) FROM matches WHERE division_code IN ('F1', 'F2');
 ```
 
 7) Have Huddersfield played Swansea in any of the recorded matches?
@@ -92,15 +98,27 @@ WHERE divisions.name = 'Premier League'
 ORDER BY(fthg + ftag) DESC
 CASE WHEN ftr = 'H' THEN 0 ELSE 1 END;
 
-
+--
+SELECT * FROM matches
+INNER JOIN divisions ON matches.division_code = divisions.code
+WHERE divisions.name = 'Premier League'
+ORDER BY(fthg + ftag) DESC, fthg DESC;
 ```
 
 10) In which division and which season were the most goals scored?
 
 ```sql
-
-
-
+SELECT matches.season, matches.division_code, divisions.code, divisions.name, SUM(fthg+ftag) 
+FROM matches 
+INNER JOIN divisions ON matches.division_code = divisions.code
+GROUP BY matches.season, divisions.name, matches.division_code, divisions.code
+ORDER BY 
+SUM(fthg+ftag)DESC;
+--
+SELECT division_code, season, SUM (fthg+ftag)
+FROM matches
+GROUP BY division_code, season
+ORDER BY sum DESC LIMIT 1;
 ```
 
 ### Useful Resources
